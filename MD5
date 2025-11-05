@@ -1,7 +1,7 @@
-31c535ee3faca4080e34bc0032a8f5c3 *DESCRIPTION
+76ee8bdeae9d378ee9dd539996a98be3 *DESCRIPTION
 4d9f4130713f10823ecf5c779ea0921b *LICENSE
 30cf21322abfbc784718c79000bd4fd5 *NAMESPACE
-a31edb815b8fa164b7fa062233f9f8d3 *NEWS.md
+cc411994c30da050c494beb6ad6e0f3c *NEWS.md
 5190ab38eff5d1aff39fcc0888217f3f *R/ICE.R
 68963f926416a62d86f718fcc6f2e6d1 *R/ICE_pool.R
 8cc9c00d14a176d0515a72463c442539 *R/ICE_stratify.R
@@ -26,4 +26,4 @@ a576d5738c0b3703132d5bb9279b95c4 *man/strat.Rd
 77de22e1cdbb0355d939420e34b1d8bf *tests/testthat.R
 2f872ee518d23406e1b5c0c41112baba *tests/testthat/test_ICE.R
 e918dfbf5477b0e596eeb3d3a14650b9 *tests/testthat/test_inputs.R
-cc93cb00a38a5ce919e1d47899d872df *tests/testthat/test_plot.R
+bfbebe350352e7639988b3156839cbbf *tests/testthat/test_plot.R

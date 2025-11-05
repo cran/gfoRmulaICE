@@ -1,3 +1,4 @@
-# gfoRmulaICE 0.1.0
+# gfoRmulaICE 0.1.1
 
-* Initial CRAN submission.
+* Fixed CRAN check errors and removed inactive maintainer email.
+* Added new maintainer: Jing Li.
