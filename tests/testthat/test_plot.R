@@ -27,6 +27,9 @@ test_that(
     expect_s3_class(plot1, "ggplot")
     })
 
+# -------------------------------------------------------------------------
+
+
 test_that(
   "check different interventions",
   {
@@ -131,6 +134,9 @@ test_that(
     plot4b <- plot(ice_fit4b)
     expect_s3_class(plot4b, "ggplot")
     })
+
+# -------------------------------------------------------------------------
+
 
 test_that(
   "plot hazard-based pooled ICE - pooled-over-time hazard model",

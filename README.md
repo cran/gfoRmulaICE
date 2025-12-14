@@ -1,6 +1,6 @@
 # gfoRmulaICE: Parametric Iterative Conditional Expectation G-Formula
   <!-- badges: start -->
-  ![CRAN Version](https://www.r-pkg.org/badges/version/gfoRmulaICE)
+  [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/gfoRmulaICE)](https://cran.r-project.org/package=gfoRmulaICE)
   [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
   [![R-CMD-check](https://github.com/CausalInference/gfoRmulaICE/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/CausalInference/gfoRmulaICE/actions/workflows/R-CMD-check.yaml)
   ![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/gfoRmulaICE)
@@ -321,7 +321,7 @@ ice_fit4e <- ice(data = gfoRmulaICE::compData,
                 outcome_model = Y ~ L1 + L2, 
                 censor_model = C ~ L1 + L2,
                 ref_idx = 0,
-                estimator = weight(list(A1 ~ L1 + L2, A2 ~ L1 + L2)),
+                estimator = weight(list(A1 ~ L1 + L2 + t0, A2 ~ L1 + L2 + t0)),
                 nsamples = 1000, 
                 ci_method = "percentile",
                 parallel = T, 

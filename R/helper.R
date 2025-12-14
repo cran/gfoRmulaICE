@@ -14,6 +14,8 @@
 #' data <- gfoRmulaICE::compData
 #' always_treat <- static(value = 1, data = data)
 static <- function(value, data) {
+  
+  data <- as.data.frame(data)
 
   interv_it <- rep(value, nrow(data))
 
@@ -35,6 +37,8 @@ static <- function(value, data) {
 #' natural_course <- natural_course(data = data, treat_var = "A1")
 #' 
 natural_course <- function(data, treat_var) {
+  
+  data <- as.data.frame(data)
   
   interv_it <- data[, treat_var]
 
@@ -69,6 +73,8 @@ natural_course_ipweighted <- function(data, id, censor_varname,
                                       K, time0, outcome_varname, covar,
                                       competing_varname, competing_fit,
                                       total_effect) {
+  
+  data <- as.data.frame(data)
   risk_weighted <- NULL
   logit_censor <- NULL
 
@@ -128,6 +134,8 @@ natural_course_ipweighted <- function(data, id, censor_varname,
 grace_period <- function(type, nperiod, condition,
                          data, id, time_name, 
                          outcome_name) {
+  
+  data <- as.data.frame(data)
   
   
   ## separate var and logical from condition
@@ -330,6 +338,8 @@ compute_weighted_hazard <- function(prob_censor, data, id, censor_varname,
                                     time_points, time_name, outcome_name,
                                     competing_varname, competing_fit,
                                     total_effect) {
+  
+  data <- as.data.frame(data)
 
   censor0_weight <- 1/ (1 - prob_censor)
   censor0_weight_cum <- unlist(tapply(censor0_weight, data[[id]], FUN = cumprod))
@@ -398,6 +408,8 @@ compute_weighted_hazard <- function(prob_censor, data, id, censor_varname,
 #' @noRd
 #'
 product <- function(data, columns){
+  
+  data <- as.data.frame(data)
 
   ncol <- length(columns)
 
@@ -484,6 +496,8 @@ weight <- function(treat_model = list()) {
 #' data <- gfoRmulaICE::compData
 #' threshold_treat <- threshold(lower_bound = 0, upper_bound = 2, var = "A1", data = data)
 threshold <- function(lower_bound, upper_bound, var, data){
+  
+  data <- as.data.frame(data)
   
   interv_it <- case_when(data[, var] >= lower_bound & data[, var] <= upper_bound ~ data[, var],
                          data[, var] > upper_bound ~ upper_bound,
@@ -621,14 +635,21 @@ get_column_name_covar <- function(icovar) {
 dynamic <- function(condition, strategy_before, strategy_after, absorb = FALSE, 
                     id, time, data) {
   
+  data <- as.data.frame(data)
+  
   first <- absorb
   
-    
-    strategy_before_values <- strategy_before
-    strategy_after_values <- strategy_after
-    
-    interv_values <- get_dynamic_interv_values(condition, strategy_before_values, 
-                                               strategy_after_values, first, id, time, data)
+  is_nc_strategy_before <- str_detect("natural_course", as.character(substitute(strategy_before)))
+  is_nc_strategy_after <- str_detect("natural_course", as.character(substitute(strategy_after)))
+  
+  strategy_before_values <- strategy_before
+  strategy_after_values <- strategy_after
+  
+  interv_values <- get_dynamic_interv_values(condition, strategy_before_values, 
+                                             strategy_after_values, 
+                                             is_nc_strategy_before,
+                                             is_nc_strategy_after,
+                                             first, id, time, data)
   
   return(interv_values)
 }
@@ -638,6 +659,8 @@ dynamic <- function(condition, strategy_before, strategy_after, absorb = FALSE,
 #' @param condition a character string that specifies a logical expression, upon which is met, the strategy specified in \code{strategy_after} is followed.
 #' @param strategy_before_values a function or vector of intervened values in the same length as the number of rows in the observed data \code{data} that specifies the strategy followed after the condition in \code{condition} is met.
 #' @param strategy_after_values a function or vector of intervened values in the same length as the number of rows in the observed data \code{data} that specifies the strategy followed before the condition in \code{condition} is met.
+#' @param is_nc_strategy_before a logical indicating whether the strategy specified in \code{strategy_before} is the natural course.
+#' @param is_nc_strategy_after a logical indicating whether the strategy specified in \code{strategy_after} is the natural course.
 #' @param first a logical indicating whether the strategy specified in \code{strategy_after} starts upon the first time when the condition specified in \code{condition} is met.
 #' @param id a character string indicating the ID variable name in \code{data}.
 #' @param time a character string indicating the time variable name in \code{data}.
@@ -645,16 +668,18 @@ dynamic <- function(condition, strategy_before, strategy_after, absorb = FALSE,
 #'
 #' @return a vector containing the intervened value in the same size as the number of rows in \code{data}.
 #' @noRd
-get_dynamic_interv_values <- function(condition, strategy_before_values, strategy_after_values, first, id, time, data) {
+get_dynamic_interv_values <- function(condition, strategy_before_values, strategy_after_values, 
+                                      is_nc_strategy_before, is_nc_strategy_after,
+                                      first, id, time, data) {
   
   unique_times <- unique(data[, time])
   
   if (first) {
-  init_info <- data %>% group_by(id) %>%
-    mutate(first_init = unique_times[which(eval(parse(text = condition)))[1]]) %>%
-    ungroup()
-  
-  init_info[, "is_init"] <- init_info[, time] >= init_info[, "first_init"]
+    init_info <- data %>% group_by(id) %>%
+      mutate(first_init = unique_times[which(eval(parse(text = condition)))[1]]) %>%
+      ungroup()
+    
+    init_info[, "is_init"] <- init_info[, time] >= init_info[, "first_init"]
   } else {
     init_info <- data %>% 
       mutate(is_init = eval(parse(text = condition)))
@@ -666,7 +691,17 @@ get_dynamic_interv_values <- function(condition, strategy_before_values, strateg
   
   init_info[, "interv_values"] <- ifelse(init_info$is_init, strategy_after_values, strategy_before_values)
   
-  return(init_info[, "interv_values"]) 
+  init_info[, "is_nc"] <- 0
+
+  if (any(is_nc_strategy_before)) {
+    init_info[, "is_nc"] <- ifelse(init_info$is_init, 0, 1)
+  }
+
+  if (any(is_nc_strategy_after)) {
+    init_info[, "is_nc"] <- ifelse(init_info$is_init, 1, 0)
+  }
+  
+  return(init_info[, c("interv_values", "is_nc")]) 
   
 }
 

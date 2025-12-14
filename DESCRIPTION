@@ -1,8 +1,8 @@
 Package: gfoRmulaICE
 Type: Package
 Title: Parametric Iterative Conditional Expectation G-Formula
-Version: 0.1.1
-Authors@R: c(person("Zhaoxi", "Cheng", role = c("aut"), 
+Version: 1.1.1
+Authors@R: c(person("Zhaoxi", "Cheng", role = c("aut"),
                      email = "zcheng@hsph.harvard.edu"),
               person("Jing", "Li", role = c("aut", "cre"), 
                       email = "jing_li@hsph.harvard.edu"),
@@ -18,8 +18,7 @@ Authors@R: c(person("Zhaoxi", "Cheng", role = c("aut"),
                       email = "mhernan@hsph.harvard.edu"),
               person("2024 The President and Fellows of Harvard College", 
                       role = c("cph")))
-Maintainer: Jing Li <jing_li@hsph.harvard.edu>
-Description: Implements iterative conditional expectation (ICE) estimators of the plug-in g-formula (Wen, Young, Robins, and Hernán (2020) <doi:10.1111/biom.13321>). 
+Description: Implements iterative conditional expectation (ICE) estimators of the plug-in g-formula (Wen, Young, Robins, and Hernán (2020) <doi: 10.1111/biom.13321>). 
     Both singly robust and doubly robust ICE estimators based on parametric models are available. 
     The package can be used to estimate survival curves under sustained treatment strategies (interventions) using longitudinal data with time-varying treatments, time-varying confounders, censoring, and competing events.
     The interventions can be static or dynamic, and deterministic or stochastic (including threshold interventions). Both prespecified and user-defined interventions are available.
@@ -31,10 +30,10 @@ Imports: data.table, ggplot2, nnet, doParallel, parallel, foreach,
         Hmisc, splines
 Suggests: testthat (>= 3.0.0)
 Config/testthat/edition: 3
-RoxygenNote: 7.3.3
+RoxygenNote: 7.3.2
 Depends: R (>= 2.10)
 NeedsCompilation: no
-Packaged: 2025-11-04 19:50:20 UTC; wangzilong
+Packaged: 2025-12-14 21:29:40 UTC; jingli
 Author: Zhaoxi Cheng [aut],
   Jing Li [aut, cre],
   Sophia Rein [aut],
@@ -43,5 +42,6 @@ Author: Zhaoxi Cheng [aut],
   Lan Wen [aut],
   Miguel A. Hernán [aut],
   2024 The President and Fellows of Harvard College [cph]
+Maintainer: Jing Li <jing_li@hsph.harvard.edu>
 Repository: CRAN
-Date/Publication: 2025-11-05 23:20:02 UTC
+Date/Publication: 2025-12-14 22:00:02 UTC
